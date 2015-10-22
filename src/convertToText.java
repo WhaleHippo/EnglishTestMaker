@@ -12,7 +12,7 @@ public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt�
 	 * main 코드 출처 http://jsonobject.tistory.com/127
 	 * http://blog.naver.com/sarah7_2000/220414217387
 	 */
-	private static String URL = "D:/dropbox/Dropbox/englishtest convert";
+	private static String URL = "/home/whalehippo/Dropbox/englishtest convert";
 	public static void convert(FileInputStream file, String name) {
 		FileWriter convertText = null;
 		XSSFWorkbook wb = null;
@@ -59,6 +59,17 @@ public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt�
 			e.printStackTrace();
 		}
 
+	}
+	
+	public static boolean isword(String word){ // 단어인지 숙어인지 파악하는 메소드
+		System.out.println("문자 길이 : "+word.length());
+		for(int i =0;i<word.length();i++){
+			System.out.println(word.substring(i, i+1));
+			if(word.charAt(i)==' '){
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public static String getURL(){

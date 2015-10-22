@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.Vector;
 
 public class readFiles { // 폴더 내의 파일을 읽는 클래스. xlsx파일을 변환할때나, 변환된 txt파일로 테스트지를 만들때 사용 
-	private static String URL = "D:/dropbox/Dropbox/englishtest"; // 변환할 xlsx 파일이 저장된 폴더
-	private static String TESTURL = "D:/dropbox/Dropbox/앱/Biscuit"; // 병합된 텍스트파일, 테스트파일을 저장하는 폴더
+	private static String URL = "/home/whalehippo/Dropbox/englishtest"; // 변환할 xlsx 파일이 저장된 폴더
+	private static String TESTURL = "/home/whalehippo/Dropbox/앱/Biscuit"; // 병합된 텍스트파일, 테스트파일을 저장하는 폴더
 	private static File dir = null;
 	
 	public static void readFilesforConvert() {
