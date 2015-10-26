@@ -74,7 +74,7 @@ public class readFiles { // 폴더 내의 파일을 읽는 클래스. xlsx파일
 	public static void readFilesforMakeTest(int num){
 		BufferedReader BR = null;
 		FileWriter FW = null;
-		Vector<String> V = new Vector(num);
+		Vector<String> V = new Vector<String>(num);
 		try{
 			BR = new BufferedReader(new FileReader(TESTURL+"/hippo.txt"));
 			FW = new FileWriter(TESTURL+"/english test.txt");
