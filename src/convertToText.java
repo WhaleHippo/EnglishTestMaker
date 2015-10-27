@@ -12,8 +12,8 @@ public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt�
 	 * main 코드 출처 http://jsonobject.tistory.com/127
 	 * http://blog.naver.com/sarah7_2000/220414217387
 	 */
-	//private static String URL = "/home/whalehippo/Dropbox/englishtest convert";
-	private static String URL = "D:/dropbox/Dropbox/englishtest convert";
+	private static String URL = "/home/whalehippo/Dropbox/englishtest convert";
+	//private static String URL = "D:/dropbox/Dropbox/englishtest convert";
 	public static void convert(FileInputStream file, String name) {
 		FileWriter convertText = null;
 		XSSFWorkbook wb = null;
