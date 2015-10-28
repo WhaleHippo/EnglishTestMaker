@@ -140,7 +140,7 @@ public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt�
 				continue;
 			}
 			try {
-				FW.write(readRow.getCell(1).getStringCellValue()+"\t  "+readRow.getCell(2).getStringCellValue()+"\t0\n");
+				FW.write(readRow.getCell(2).getStringCellValue()+"\t  "+readRow.getCell(1).getStringCellValue()+"\t0\n");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
