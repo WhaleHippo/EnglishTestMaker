@@ -8,10 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt형태로 변환하는 클래
-	/*
-	 * main 코드 출처 http://jsonobject.tistory.com/127
-	 * http://blog.naver.com/sarah7_2000/220414217387
-	 */
+
 	private static String URL = "/home/whalehippo/Dropbox/englishtest convert";
 	//private static String URL = "D:/dropbox/Dropbox/englishtest convert";
 	public static void convert(FileInputStream file, String name) {
@@ -31,7 +28,6 @@ public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt�
 		for (int r = 0; r < 50; r++) {
 			XSSFRow row = sheet.getRow(r);// 한줄 얻어오기
 			if (row == null){	continue;	}// 못읽어오면 다음줄로
-			int cells = row.getPhysicalNumberOfCells();// 몇칸인지
 			
 			String value = "";
 
@@ -62,13 +58,100 @@ public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt�
 
 	}
 	
-	public static boolean isword(String word) { // 단어인지 숙어인지 파악하는 메소드
-		for (int i = 0; i < word.length(); i++) {
-			if (word.charAt(i) == ' ') {
-				return false;
+	public static void convert(database DB, int option){
+		convertAll(DB);
+		convertwordonly(DB);
+		convertwordonlymeantoword(DB);
+	}
+	
+	private static void convertAll(database DB){
+		FileWriter FW = null;
+		try {
+			FW = new FileWriter("/home/whalehippo/Dropbox/앱/Biscuit"+"/convertAll.txt");
+		} catch (IOException e) {
+			System.out.println("병합할 파일을 생성하지 못하였습니다");
+			e.printStackTrace();
+		}
+		
+		XSSFSheet readSheet = DB.getDB().getSheetAt(0);
+	
+		for(int i = 1;i<readSheet.getPhysicalNumberOfRows();i++){
+			XSSFRow readRow = readSheet.getRow(i);
+			try {
+				FW.write(readRow.getCell(1).getStringCellValue()+"\t  "+readRow.getCell(2).getStringCellValue()+"\t0\n");
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
-		return true;
+		
+		try {
+			FW.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private static void convertwordonly(database DB){
+		FileWriter FW = null;
+		try {
+			FW = new FileWriter("/home/whalehippo/Dropbox/앱/Biscuit"+"/convertwordonly.txt");
+		} catch (IOException e) {
+			System.out.println("병합할 파일을 생성하지 못하였습니다");
+			e.printStackTrace();
+		}
+		
+		XSSFSheet readSheet = DB.getDB().getSheetAt(0);
+	
+		for(int i = 1;i<readSheet.getPhysicalNumberOfRows();i++){
+			XSSFRow readRow = readSheet.getRow(i);
+			if(readRow.getCell(3).getNumericCellValue() == 1){
+				continue;
+			}
+			try {
+				FW.write(readRow.getCell(1).getStringCellValue()+"\t  "+readRow.getCell(2).getStringCellValue()+"\t0\n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		try {
+			FW.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private static void convertwordonlymeantoword(database DB){
+		FileWriter FW = null;
+		try {
+			FW = new FileWriter("/home/whalehippo/Dropbox/앱/Biscuit"+"/convertwordonlymeantoword.txt");
+		} catch (IOException e) {
+			System.out.println("병합할 파일을 생성하지 못하였습니다");
+			e.printStackTrace();
+		}
+		
+		XSSFSheet readSheet = DB.getDB().getSheetAt(0);
+	
+		for(int i = 1;i<readSheet.getPhysicalNumberOfRows();i++){
+			XSSFRow readRow = readSheet.getRow(i);
+			if(readRow.getCell(3).getNumericCellValue() == 1){
+				continue;
+			}
+			try {
+				FW.write(readRow.getCell(1).getStringCellValue()+"\t  "+readRow.getCell(2).getStringCellValue()+"\t0\n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		try {
+			FW.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static String getURL(){

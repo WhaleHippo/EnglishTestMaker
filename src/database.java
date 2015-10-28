@@ -8,10 +8,16 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class database {
+	
+	/*
+	 * main 코드 출처 http://jsonobject.tistory.com/127
+	 * http://blog.naver.com/sarah7_2000/220414217387
+	 */
+	
 	private String url = "/home/whalehippo/Dropbox/englishDatabase/";
 	//private String url = "D:/dropbox/Dropbox/englishDatabase";
-	XSSFWorkbook readData = null; // 입력될 데이터
-	XSSFWorkbook database = null; // DB...라고 쓰고 그냥 엑셀파일이라 읽는다 ㅇㅅㅇ
+	private XSSFWorkbook readData = null; // 입력될 데이터
+	private XSSFWorkbook database = null; // DB...라고 쓰고 그냥 엑셀파일이라 읽는다 ㅇㅅㅇ
 
 	public database(String name) {
 		seturl(name);
@@ -22,6 +28,10 @@ public class database {
 			e.printStackTrace();
 		}
 		System.out.println("데이터베이스 열수 : "+database.getSheetAt(0).getPhysicalNumberOfRows());
+	}
+	
+	public XSSFWorkbook getDB(){
+		return database;
 	}
 	
 	

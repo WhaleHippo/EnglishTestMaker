@@ -10,8 +10,10 @@ public class Test {
 		 * readFiles.readFilesforMakeTest(250);
 		 */
 
-		writeAllData();
-		
+		//writeAllData();
+		database db = new database("TOEIC");
+		convertToText.convert(db, 0);
+
 		System.out.println("종료");
 	}
 	
