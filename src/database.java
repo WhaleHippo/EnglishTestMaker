@@ -35,16 +35,17 @@ public class database {
 	}
 	
 	
-	public void insert(File file){ // 절찬 작업중
+	public void insert(File file){
 		try {
 			readData = new XSSFWorkbook(new FileInputStream(file));
 		} catch (Exception e) {
 			e.printStackTrace();
+			return;
 		}
 		XSSFSheet readSheet = readData.getSheetAt(0);
 		XSSFSheet writeSheet = database.getSheetAt(0);
 		System.out.println("읽을 파일의 열수 "+readSheet.getPhysicalNumberOfRows());
-		for(int i = 0; i<readSheet.getPhysicalNumberOfRows();i++){ // 지금 작업하고 있는 부분
+		for(int i = 0; i<readSheet.getPhysicalNumberOfRows();i++){
 			XSSFRow readRow = readSheet.getRow(i);
 			try {
 				if (readRow.getCell(0).getStringCellValue() == null || readRow.getCell(0).getStringCellValue().equalsIgnoreCase("")) {
@@ -53,8 +54,7 @@ public class database {
 			} catch (Exception e) {
 				break;
 			}
-			XSSFRow writeRow = writeSheet.createRow(writeSheet
-					.getPhysicalNumberOfRows());
+			XSSFRow writeRow = writeSheet.createRow(writeSheet.getPhysicalNumberOfRows());
 			try {
 				writeRow.createCell(0).setCellValue(file.getName());
 				writeRow.createCell(1).setCellValue(readRow.getCell(0).getStringCellValue());
@@ -108,6 +108,10 @@ public class database {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void update(){ // database의 자료등을 업데이트 할때 사용
+		
 	}
 	
 	private int isword(String word) { // 단어인지 숙어인지 파악하는 메소드

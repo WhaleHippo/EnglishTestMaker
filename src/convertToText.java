@@ -10,7 +10,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt형태로 변환하는 클래
 
 	private static String URL = "/home/whalehippo/Dropbox/englishtest convert";
+	private static String BISCUIT = "/home/whalehippo/Dropbox/앱/Biscuit";
 	//private static String URL = "D:/dropbox/Dropbox/englishtest convert";
+	//private static String BISCUIT = "D:/dropbox/Dropbox/앱/Biscuit";
 	public static void convert(FileInputStream file, String name) {
 		FileWriter convertText = null;
 		XSSFWorkbook wb = null;
@@ -36,8 +38,6 @@ public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt�
 			cell = row.getCell(1);// 한칸 얻어오기
 			value = value + cell.getStringCellValue() + "\t";
 			value = value + "0" + "\n";
-			//System.out.println("열수 : " + cells);
-			//System.out.print(r + ":" + value);
 			try {
 				convertText.write(value);
 			} catch (IOException e) {
@@ -58,60 +58,57 @@ public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt�
 
 	}
 	
-	public static void convert(database DB, int option){
-		convertAll(DB);
-		convertwordonly(DB);
-		convertwordonlymeantoword(DB);
+	public static void convert(database DB, int option, int numData){
+		int firstRead = 0;
+		int secondRead = 0;
+		boolean wordOnly = false;
+		
+		switch(option){
+		
+		case 1 : // 단어 + 숙어 데이터 출력
+			firstRead=1;
+			secondRead=2;
+			wordOnly = false;
+			break;
+		case 2 : // 단어만 출력
+			firstRead=1;
+			secondRead=2;
+			wordOnly = true;
+			break;
+		case 3 :  // 단어만 출력하되, 뜻 -> 단어 순으로 출력
+			firstRead=2;
+			secondRead=1;
+			wordOnly = true;
+			break;
+		}
+		convert(DB,firstRead,secondRead, wordOnly,numData);
 	}
 	
-	private static void convertAll(database DB){
+	private static void convert(database DB, int firstRead, int secondRead, boolean wordOnly, int numData){
 		FileWriter FW = null;
+		
 		try {
-			FW = new FileWriter("/home/whalehippo/Dropbox/앱/Biscuit"+"/convertAll.txt");
+			FW = new FileWriter(BISCUIT+"/"+System.currentTimeMillis()%10000+".txt");
 		} catch (IOException e) {
 			System.out.println("병합할 파일을 생성하지 못하였습니다");
 			e.printStackTrace();
 		}
 		
 		XSSFSheet readSheet = DB.getDB().getSheetAt(0);
-	
-		for(int i = 1;i<readSheet.getPhysicalNumberOfRows();i++){
+		numData = Math.min(numData, readSheet.getPhysicalNumberOfRows());
+		
+		for(int i = 1;i<=numData;i++){
 			XSSFRow readRow = readSheet.getRow(i);
-			try {
-				FW.write(readRow.getCell(1).getStringCellValue()+"\t  "+readRow.getCell(2).getStringCellValue()+"\t0\n");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		try {
-			FW.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	private static void convertwordonly(database DB){
-		FileWriter FW = null;
-		try {
-			FW = new FileWriter("/home/whalehippo/Dropbox/앱/Biscuit"+"/convertwordonly.txt");
-		} catch (IOException e) {
-			System.out.println("병합할 파일을 생성하지 못하였습니다");
-			e.printStackTrace();
-		}
-		
-		XSSFSheet readSheet = DB.getDB().getSheetAt(0);
-	
-		for(int i = 1;i<readSheet.getPhysicalNumberOfRows();i++){
-			XSSFRow readRow = readSheet.getRow(i);
-			if(readRow.getCell(3).getNumericCellValue() == 1){
+			if(wordOnly && (readRow.getCell(3).getNumericCellValue() == 1)){ //워드온리 옵션을 사용하고, 단어가 숙어면 재낌
+				System.out.println("숙어 아웃");
+				numData++;
 				continue;
 			}
 			try {
-				FW.write(readRow.getCell(1).getStringCellValue()+"\t  "+readRow.getCell(2).getStringCellValue()+"\t0\n");
+				FW.write(readRow.getCell(firstRead).getStringCellValue()+"\t  "+readRow.getCell(secondRead).getStringCellValue()+"\t0\n");
 			} catch (IOException e) {
 				e.printStackTrace();
+				break;
 			}
 		}
 		
@@ -120,38 +117,6 @@ public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt�
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-	}
-	
-	private static void convertwordonlymeantoword(database DB){
-		FileWriter FW = null;
-		try {
-			FW = new FileWriter("/home/whalehippo/Dropbox/앱/Biscuit"+"/convertwordonlymeantoword.txt");
-		} catch (IOException e) {
-			System.out.println("병합할 파일을 생성하지 못하였습니다");
-			e.printStackTrace();
-		}
-		
-		XSSFSheet readSheet = DB.getDB().getSheetAt(0);
-	
-		for(int i = 1;i<readSheet.getPhysicalNumberOfRows();i++){
-			XSSFRow readRow = readSheet.getRow(i);
-			if(readRow.getCell(3).getNumericCellValue() == 1){
-				continue;
-			}
-			try {
-				FW.write(readRow.getCell(2).getStringCellValue()+"\t  "+readRow.getCell(1).getStringCellValue()+"\t0\n");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		try {
-			FW.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 	}
 	
 	public static String getURL(){

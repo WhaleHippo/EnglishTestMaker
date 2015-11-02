@@ -1,9 +1,8 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 
 public class Test {
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args){
 		/*
 		 * readFiles.readFilesforConvert();
 		 * readFiles.makeTotalFile(); //
@@ -12,7 +11,10 @@ public class Test {
 
 		//writeAllData();
 		database db = new database("TOEIC");
-		convertToText.convert(db, 0);
+		
+		//db.insert(new File("null"));
+		
+		convertToText.convert(db, 1, 500);
 
 		System.out.println("종료");
 	}
