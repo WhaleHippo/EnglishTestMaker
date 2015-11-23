@@ -23,12 +23,37 @@ public class database {
 		seturl(name);
 		try {
 			database = new XSSFWorkbook(new FileInputStream(url));
+			System.out.println("데이터베이스 열수 : "+database.getSheetAt(0).getPhysicalNumberOfRows());
 		} catch (Exception e) {
 			System.out.println("database파일을 읽을수 없다.");
 			e.printStackTrace();
+			return;
 		}
-		System.out.println("데이터베이스 열수 : "+database.getSheetAt(0).getPhysicalNumberOfRows());
 	}
+	public database(File file){ // 절찬 작업중 문제 발생 : 크레이트파일메소드로 엑셀파일을 만든다 한들, 그저 확장자만 엑셀인 0바이트의 파일에 불과함. 그래도 작동할까?
+		seturl(file.getName());
+		file = new File(url);
+		if(!file.isFile()){ creatDatabase(file); }
+		try {
+			database = new XSSFWorkbook(new FileInputStream(file));
+			System.out.println("데이터베이스 열수 : "+database.getSheetAt(0).getPhysicalNumberOfRows());
+		} catch (Exception e) {
+			System.out.println("database파일을 읽을수 없다.");
+			e.printStackTrace();
+			return ;
+		}
+	}
+	
+	private void creatDatabase(File file){ // db파일에 해당될 엑셀파일이 없을경우, 생성하기 위한 메소드 당연하지만 아직덜만듬ㅋ
+		try {
+			System.out.println("db파일이 없어서 생성합니다.");
+			file.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	
 	public XSSFWorkbook getDB(){
 		return database;
@@ -67,7 +92,7 @@ public class database {
 		save();
 	}
 	
-	public void insert(String a){
+	public void insert(String a){ // 절찬 작업중
 		XSSFSheet writeSheet = database.getSheetAt(0);
 		XSSFRow writeRow = writeSheet.getRow(0);
 		writeRow.createCell(5).setCellValue(a);

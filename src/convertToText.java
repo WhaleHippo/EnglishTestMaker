@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -58,37 +59,23 @@ public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt�
 
 	}
 	
+	public static void convert(File file, int option){
+		database DB = new database(file);
+		settingOption(option);
+		convert(DB,firstRead,secondRead, wordOnly,1000);
+	}
+	
 	public static void convert(database DB, int option, int numData){
-		int firstRead = 0;
-		int secondRead = 0;
-		boolean wordOnly = false;
-		
-		switch(option){
-		
-		case 1 : // 단어 + 숙어 데이터 출력
-			firstRead=1;
-			secondRead=2;
-			wordOnly = false;
-			break;
-		case 2 : // 단어만 출력
-			firstRead=1;
-			secondRead=2;
-			wordOnly = true;
-			break;
-		case 3 :  // 단어만 출력하되, 뜻 -> 단어 순으로 출력
-			firstRead=2;
-			secondRead=1;
-			wordOnly = true;
-			break;
-		}
+		settingOption(option);
 		convert(DB,firstRead,secondRead, wordOnly,numData);
 	}
 	
+
+	
 	private static void convert(database DB, int firstRead, int secondRead, boolean wordOnly, int numData){
 		FileWriter FW = null;
-		
 		try {
-			FW = new FileWriter(BISCUIT+"/"+System.currentTimeMillis()%10000+".txt");
+			FW = new FileWriter(BISCUIT+"/"+System.currentTimeMillis()%10000+wordOnly+".txt");
 		} catch (IOException e) {
 			System.out.println("병합할 파일을 생성하지 못하였습니다");
 			e.printStackTrace();
@@ -99,7 +86,7 @@ public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt�
 		
 		for(int i = 1;i<=numData;i++){
 			XSSFRow readRow = readSheet.getRow(i);
-			if(wordOnly && (readRow.getCell(3).getNumericCellValue() == 1)){ //워드온리 옵션을 사용하고, 단어가 숙어면 재낌
+			if(wordOnly && (readRow.getCell(3).getNumericCellValue() == 1)){
 				System.out.println("숙어 아웃");
 				numData++;
 				continue;
@@ -122,4 +109,28 @@ public class convertToText { // 읽은xlsx파일을 비스킷 폼에 맞게 txt�
 	public static String getURL(){
 		return URL;
 	}
+	
+	private static int firstRead = 0;
+	private static int secondRead = 0;
+	private static boolean wordOnly = false;
+	private static void settingOption(int option) { // 변환에 사용할 옵션들을 세팅
+		switch (option) {
+		case 1: // 단어 + 숙어 데이터 출력
+			firstRead = 1;
+			secondRead = 2;
+			wordOnly = false;
+			break;
+		case 2: // 단어만 출력
+			firstRead = 1;
+			secondRead = 2;
+			wordOnly = true;
+			break;
+		case 3: // 단어만 출력하되, 뜻 -> 단어 순으로 출력
+			firstRead = 2;
+			secondRead = 1;
+			wordOnly = true;
+			break;
+		}
+	}
+	
 }
